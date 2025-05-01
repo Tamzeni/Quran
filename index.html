@@ -6,9 +6,8 @@
     
     <title data-lang-key="title">Quran Player</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Consider adding a favicon -->
     <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
-    <link rel="icon" href="Media/icon.ico" type="image/x-icon">
+    <link rel="icon" href="icon.ico" type="image/x-icon">
 </head>
 <body>
     <div class="app-container">
@@ -29,104 +28,87 @@
 
                 <section id="audible-section" class="content-section">
                     <div class="selectors">
-                        <div>
+                        <div class="selector-container reciter-selector">
+                            <label for="reciter-select" data-lang-key="selectReciter">Select Reciter:</label>
                             <select id="reciter-select">
-                                <!-- Options will be populated by JS -->
+                                <!-- Options will be populated by script.js -->
                             </select>
                         </div>
-                        <div>
+                        <div class="selector-container surah-selector">
+                            <label for="surah-select" data-lang-key="selectSurah">Select Surah:</label>
                             <select id="surah-select">
-                                <!-- Options will be populated by JS -->
+                                <!-- Options will be populated by script.js -->
                             </select>
                         </div>
                     </div>
                     <div class="audio-player-container">
                         <div class="skip-buttons">
-                            <button id="skip-backward" class="skip-button" aria-label="Skip backward 10 seconds">⏪ 10s</button>
-                            <audio id="audio-player" controls controlsList="nodownload">
-                                Your browser does not support the audio element.
-                                <!-- Source will be set by JS -->
-                            </audio>
-                            <button id="skip-forward" class="skip-button" aria-label="Skip forward 10 seconds">10s ⏩</button>
+                            <button id="skip-backward" class="skip-button" aria-label="Skip Backward 10 seconds">⏮️ 10s</button>
+                            <button id="skip-forward" class="skip-button" aria-label="Skip Forward 10 seconds">10s ⏭️</button>
                         </div>
+                        <audio id="audio-player" controls>
+                            Your browser does not support the audio element.
+                        </audio>
                     </div>
                 </section>
 
-                <section id="readable-section" class="content-section" style="display: none;">
-                    
-                    <!-- Rewayah Buttons (Replaces Selector) -->
-                    <div id="rewayah-selector-container" style="display: none;">
-                        
+                <section id="readable-section" class="content-section hidden">
+                    <h2 data-lang-key="readableContentTitle">Readable Quran Content</h2>
+
+                    <div id="rewayah-selector-container" class="selector-container rewayah-selector hidden">
+                        <label class="selector-label" data-lang-key="selectRewayahLabel">Select Rewayah:</label>
                         <div id="rewayah-buttons-container" class="rewayah-buttons">
-                            <!-- Rewayah buttons will be populated by JS -->
+                            <!-- Rewayah buttons populated by JS -->
                         </div>
-                        <div id="rewayah-validation-message" class="validation-message" style="display: none;"></div>
+                        <div id="rewayah-validation-message" class="validation-message hidden"></div>
                     </div>
 
-                    <!-- Placeholder for English/Initial state -->
-                    <p data-lang-key="readablePlaceholder">This section will display the text of the selected Surah. (Functionality to be added)</p>
+                    <p data-lang-key="readablePlaceholder" class="hidden">This section will display the text of the selected Surah. (Functionality to be added)</p>
                     
-                    <!-- REMOVED iframe for English PDF -->
-                    <!-- <iframe id="pdf-viewer-en" style="display: none; width: 100%; height: 80vh; border: none;" src=""></iframe> -->
-                    
-                    <!-- ADDED: PDF.js Viewer Elements -->
-                    <div id="pdf-viewer-container" class="pdf-viewer" style="display: none;">
-                        <!-- ADDED: TOC Sidebar -->
+                    <div id="pdf-viewer-container" class="pdf-viewer hidden">
                         <div id="custom-toc-sidebar" class="pdf-toc-sidebar">
-                            <h4 id="toc-header" class="active">Surah List</h4>
-                            <ul id="custom-toc-list"></ul>
-                            <!-- MOVED: Glossary Button -->
+                            <h4 id="toc-header" class="pdf-sidebar-button active">Table of Contents</h4>
+                            <ul id="custom-toc-list">
+                                <!-- TOC items will be populated by script.js -->
+                            </ul>
                             <button id="glossary-button" class="pdf-sidebar-button">Quran Glossary</button>
+                            <button id="pdf-download" class="pdf-download-button hidden">Download PDF</button>
                         </div>
-                        <!-- END TOC Sidebar -->
+                        
                         <div class="pdf-viewer-main">
-                             <!-- REMOVED: Mobile TOC Toggle Button -->
-                             <!-- <button id="toggle-toc-mobile" class="pdf-sidebar-button">Toggle Table of Contents</button> -->
-                             
-                             <div id="pdf-controls" class="pdf-controls">
-                                 <!-- ADDED: Hamburger TOC Toggle Button -->
-                                 <button id="hamburger-toc" aria-label="Toggle Table of Contents">☰</button>
-                                 <!-- END ADDITION -->
-                                 <button id="pdf-prev">◄</button>
-                                 <span>Page 
-                                     <input type="number" id="pdf-page-input" class="pdf-page-input" min="1">
-                                     / <span id="pdf-page-count">-</span>
-                                 </span>
-                                 <button id="pdf-go-to-page">Go</button>
-                                 <button id="pdf-next">►</button>
-                             </div>
-                             <div class="pdf-canvas-container">
-                                 <canvas id="pdf-canvas"></canvas>
-                             </div>
-                             <button id="pdf-download" class="pdf-download-button">Download Entire Quran in English (PDF)</button>
+                            <div class="pdf-controls">
+                                <button id="hamburger-toc" title="Table of Contents">☰</button>
+                                <button id="pdf-prev" title="Previous Page">◀</button>
+                                <span>Page: <input type="number" id="pdf-page-input" min="1" value="1"> / <span id="pdf-page-count">-</span></span>
+                                <button id="pdf-go-to-page" title="Go to Page">Go</button>
+                                <button id="pdf-next" title="Next Page">▶</button>
+                                
+                            </div>
+                            <div class="pdf-canvas-container">
+                                <canvas id="pdf-canvas"></canvas>
+                            </div>
                         </div>
+                        <div id="toc-overlay"></div>
                     </div>
-                    <!-- END ADDITION -->
-                    
-                    <!-- Container for Surah buttons -->
-                    <div id="surah-buttons-container" class="surah-grid" style="display: none;"></div>
-                    
-                    <!-- Area for displaying Surah text -->
-                    <div id="surah-text-display-container" style="display: none;">
-                        <!-- ADDED Navigation Header -->
-                        <div class="surah-navigation-header" style="display: none;">
-                            <button id="prev-surah" class="surah-nav-button prev">
-                                <span class="arrow">&lt;</span>
-                                <span class="surah-name"></span>
+
+                    <div id="surah-buttons-container" class="surah-grid hidden">
+                        <!-- Surah buttons populated by JS -->
+                    </div>
+
+                    <div id="surah-text-display-container" class="hidden">
+                        <div class="surah-navigation-header hidden">
+                            <button id="prev-surah" class="surah-nav-button prev hidden" aria-label="Previous Surah">
+                                <span class="arrow">‹</span> <span class="surah-name"></span>
                             </button>
                             <button id="back-to-surah-select" data-lang-key="backButton">Back</button>
-                            <button id="next-surah" class="surah-nav-button next">
-                                <span class="surah-name"></span>
-                                <span class="arrow">&gt;</span>
+                            <button id="next-surah" class="surah-nav-button next hidden" aria-label="Next Surah">
+                                <span class="surah-name"></span> <span class="arrow">›</span>
                             </button>
                         </div>
-                        <!-- END Navigation Header -->
 
-                        <div id="surah-display-title" class="surah-display-title" style="display: none;"></div>
-                        <div id="basmala-display" class="basmala-display" style="display: none;"></div>
-                        <div id="surah-text-display" lang="ar" dir="rtl">
-                            <!-- Surah text loaded here by JS -->
-                        </div>
+                        <div id="surah-display-title" class="surah-display-title hidden"></div>
+                        <div id="basmala-display" class="basmala-display hidden"></div>
+                        <div id="surah-text-display" dir="rtl" lang="ar"></div>
                     </div>
                 </section>
             </main>
@@ -138,9 +120,6 @@
             </footer>
             -->
         </div>
-        <!-- ADDED: Overlay for mobile TOC -->
-        <div id="toc-overlay"></div>
-        <!-- END ADDITION -->
     </div>
 
     <!-- Make script type=module for PDF.js import -->

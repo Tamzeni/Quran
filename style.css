@@ -9,10 +9,17 @@
     padding: 0;
 }
 
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
 html {
     font-family: sans-serif;
     line-height: 1.5;
     color: #333;
+    font-size: 16px; /* Base font size */
+    scroll-behavior: smooth;
 }
 
 body {
@@ -983,4 +990,16 @@ html[dir="rtl"] .section-toggle .nav-button {
     margin-top: 0;
     margin-bottom: 10px;
     border-bottom: none;
+}
+
+/* Style for disabled TOC links */
+.toc-link-disabled {
+    color: #999 !important; 
+    cursor: default !important;
+    text-decoration: none !important;
+}
+
+#custom-toc-list ul {
+    list-style: none;
+    padding-left: 15px; /* Indent sub-items */
 } 

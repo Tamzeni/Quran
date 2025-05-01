@@ -263,7 +263,7 @@ function populateRewayahButtons() {
 
             // Hide validation message on selection
             if (validationMessageElement) {
-                validationMessageElement.style.display = 'none';
+                validationMessageElement.classList.add('hidden');
                 validationMessageElement.textContent = '';
             }
         });
@@ -298,40 +298,40 @@ function updateAudioSource() {
 // Function to display the Surah selection UI
 function showSurahSelectionUI() {
     if (currentLanguage === 'ar') { // Only if Arabic
-        if (readablePlaceholder) readablePlaceholder.style.display = 'none';
-        if (rewayahSelectorContainer) rewayahSelectorContainer.style.display = 'block'; // Show the container for label and buttons
-        if (surahButtonsContainer) surahButtonsContainer.style.display = 'grid';
-        if (surahTextDisplayContainer) surahTextDisplayContainer.style.display = 'none'; // Hide text
+        if (readablePlaceholder) readablePlaceholder.classList.add('hidden');
+        if (rewayahSelectorContainer) rewayahSelectorContainer.classList.remove('hidden');
+        if (surahButtonsContainer) surahButtonsContainer.classList.remove('hidden');
+        if (surahTextDisplayContainer) surahTextDisplayContainer.classList.add('hidden');
         populateReadableSurahButtons(); // Repopulate Surah buttons
         populateRewayahButtons(); // Populate Rewayah buttons
         if (validationMessageElement) {
-            validationMessageElement.style.display = 'none';
+            validationMessageElement.classList.add('hidden');
             validationMessageElement.textContent = '';
         }
-        if (surahNavigationHeader) surahNavigationHeader.style.display = 'none';
-        if (pdfViewerContainer) pdfViewerContainer.style.display = 'none'; // Hide PDF viewer
+        if (surahNavigationHeader) surahNavigationHeader.classList.add('hidden');
+        if (pdfViewerContainer) pdfViewerContainer.classList.add('hidden');
     } else {
         // Handle non-Arabic case (might show placeholder or PDF viewer)
         updateReadableSectionVisibility();
     }
-    if (backToSurahSelectButton) backToSurahSelectButton.style.display = 'none';
+    if (backToSurahSelectButton) backToSurahSelectButton.classList.add('hidden');
 }
 
 // Function to display the Surah text UI
 function showSurahTextUI() {
-    if (readablePlaceholder) readablePlaceholder.style.display = 'none';
-    if (rewayahSelectorContainer) rewayahSelectorContainer.style.display = 'none'; // Hide selector
-    if (surahButtonsContainer) surahButtonsContainer.style.display = 'none'; // Hide buttons
-    if (surahTextDisplayContainer) surahTextDisplayContainer.style.display = 'block'; // Show text container
-    if (pdfViewerContainer) pdfViewerContainer.style.display = 'none'; // Hide PDF viewer
+    if (readablePlaceholder) readablePlaceholder.classList.add('hidden');
+    if (rewayahSelectorContainer) rewayahSelectorContainer.classList.add('hidden');
+    if (surahButtonsContainer) surahButtonsContainer.classList.add('hidden');
+    if (surahTextDisplayContainer) surahTextDisplayContainer.classList.remove('hidden');
+    if (pdfViewerContainer) pdfViewerContainer.classList.add('hidden');
 
     // Show/hide nav header and individual buttons
     if (surahNavigationHeader) {
-        surahNavigationHeader.style.display = 'flex'; // Show header
+        surahNavigationHeader.classList.remove('hidden');
         if (prevSurahButton && nextSurahButton) {
-            prevSurahButton.style.display = currentSurahOrder > 1 ? 'flex' : 'none'; // Use flex for nav buttons
-            nextSurahButton.style.display = currentSurahOrder < 114 ? 'flex' : 'none'; // Use flex for nav buttons
-            backToSurahSelectButton.style.display = 'inline-block';
+            if (currentSurahOrder > 1) { prevSurahButton.classList.remove('hidden'); } else { prevSurahButton.classList.add('hidden'); }
+            if (currentSurahOrder < 114) { nextSurahButton.classList.remove('hidden'); } else { nextSurahButton.classList.add('hidden'); }
+            backToSurahSelectButton.classList.remove('hidden');
         }
     }
 }
@@ -366,7 +366,7 @@ function updateNavigationButtons(currentSurahOrder) {
         }
     }
     prevSurahButton.disabled = currentSurahOrder <= 1;
-    prevSurahButton.style.display = currentSurahOrder > 1 ? 'flex' : 'none';
+    if (currentSurahOrder > 1) { prevSurahButton.classList.remove('hidden'); } else { prevSurahButton.classList.add('hidden'); }
 
     // Update next button
     const nextNameSpan = nextSurahButton.querySelector('.surah-name');
@@ -384,7 +384,7 @@ function updateNavigationButtons(currentSurahOrder) {
         }
     }
     nextSurahButton.disabled = currentSurahOrder >= 114;
-    nextSurahButton.style.display = currentSurahOrder < 114 ? 'flex' : 'none';
+    if (currentSurahOrder < 114) { nextSurahButton.classList.remove('hidden'); } else { nextSurahButton.classList.add('hidden'); }
     console.log('[NavUpdate] Finished updating buttons.'); // <<< LOGGING
 }
 
@@ -402,8 +402,8 @@ async function displaySurahText(rewayahId, surahOrder) {
     const basmalaDisplayElement = document.getElementById('basmala-display');
     const surahTitleDisplayElement = document.getElementById('surah-display-title');
 
-    basmalaDisplayElement.style.display = 'none';
-    surahTitleDisplayElement.style.display = 'none';
+    basmalaDisplayElement.classList.add('hidden');
+    surahTitleDisplayElement.classList.add('hidden');
 
     // Ensure combined data is loaded
     if (!quranData || !quranData.surahs || !quranData.rewayaat) {
@@ -443,17 +443,17 @@ async function displaySurahText(rewayahId, surahOrder) {
             if (rewayahFontClass) {
                 basmalaDisplayElement.classList.add(rewayahFontClass);
             }
-            basmalaDisplayElement.style.display = 'block';
+            basmalaDisplayElement.classList.remove('hidden');
         } else {
-            basmalaDisplayElement.style.display = 'none';
+            basmalaDisplayElement.classList.add('hidden');
         }
     } else {
-        basmalaDisplayElement.style.display = 'none';
+        basmalaDisplayElement.classList.add('hidden');
     }
 
     // 2. Handle Title display
     surahTitleDisplayElement.textContent = `${surahTitle} (${verseCount} ${currentLanguage === 'ar' ? 'آيات' : 'verses'})`;
-    surahTitleDisplayElement.style.display = 'block';
+    surahTitleDisplayElement.classList.remove('hidden');
     // --- End Display Logic ---
 
     try {
@@ -479,7 +479,7 @@ async function displaySurahText(rewayahId, surahOrder) {
         
         // Show the navigation header
         if (surahNavigationHeader) {
-            surahNavigationHeader.style.display = 'flex';
+            surahNavigationHeader.classList.remove('hidden');
         }
 
         showSurahTextUI(); // Switch to the text view (will handle nav button visibility)
@@ -487,11 +487,11 @@ async function displaySurahText(rewayahId, surahOrder) {
     } catch (error) {
         console.error(`Could not fetch or display Surah text from ${filePath}:`, error);
         surahTextDisplay.textContent = `Error loading Surah ${surahOrder}. Please try again.`;
-        surahTitleDisplayElement.style.display = 'none'; 
-        basmalaDisplayElement.style.display = 'none';
+        surahTitleDisplayElement.classList.add('hidden'); 
+        basmalaDisplayElement.classList.add('hidden');
         // Hide nav header on error
         if (surahNavigationHeader) {
-            surahNavigationHeader.style.display = 'none';
+            surahNavigationHeader.classList.add('hidden');
         }
         // No need to call showSurahTextUI here, as the container is already visible
         // and we just hid the header elements
@@ -517,12 +517,12 @@ function populateReadableSurahButtons() {
         
         button.addEventListener('click', () => {
             const surahOrder = button.dataset.surahOrder;
-            validationMessageElement.textContent = ''; 
-            validationMessageElement.style.display = 'none';
+            if (validationMessageElement) validationMessageElement.classList.add('hidden');
+            validationMessageElement.textContent = '';
 
             if (!selectedRewayahId) {
                 validationMessageElement.textContent = translations[currentLanguage].rewayahValidationMsg;
-                validationMessageElement.style.display = 'block';
+                if (validationMessageElement) validationMessageElement.classList.remove('hidden');
                 return;
             }
             console.log(`Clicked Surah: ${surahOrder} with Rewayah: ${selectedRewayahId}`);
@@ -537,9 +537,9 @@ function populateReadableSurahButtons() {
 function updateReadableSectionVisibility() {
     if (!readableSection) return;
 
-    const isReadableActive = readableSection.style.display !== 'none';
-    const isTextDisplayed = surahTextDisplayContainer && surahTextDisplayContainer.style.display !== 'none';
-    const isPdfDisplayed = pdfViewerContainer && pdfViewerContainer.style.display !== 'none';
+    const isReadableActive = !readableSection.classList.contains('hidden');
+    const isTextDisplayed = surahTextDisplayContainer && !surahTextDisplayContainer.classList.contains('hidden');
+    const isPdfDisplayed = pdfViewerContainer && !pdfViewerContainer.classList.contains('hidden');
 
     if (isReadableActive) {
         if (currentLanguage === 'en') {
@@ -553,11 +553,11 @@ function updateReadableSectionVisibility() {
         }
     } else { // Readable section is not active
         // Hide everything related to the readable section
-        if (readablePlaceholder) readablePlaceholder.style.display = 'block'; // Show placeholder if it exists
-        if (rewayahSelectorContainer) rewayahSelectorContainer.style.display = 'none';
-        if (surahButtonsContainer) surahButtonsContainer.style.display = 'none';
-        if (surahTextDisplayContainer) surahTextDisplayContainer.style.display = 'none';
-        if (pdfViewerContainer) pdfViewerContainer.style.display = 'none';
+        if (readablePlaceholder) readablePlaceholder.classList.remove('hidden');
+        if (rewayahSelectorContainer) rewayahSelectorContainer.classList.add('hidden');
+        if (surahButtonsContainer) surahButtonsContainer.classList.add('hidden');
+        if (surahTextDisplayContainer) surahTextDisplayContainer.classList.add('hidden');
+        if (pdfViewerContainer) pdfViewerContainer.classList.add('hidden');
         // Optionally clear dynamic content if needed
         if (surahButtonsContainer) surahButtonsContainer.innerHTML = '';
         if (rewayahButtonsContainer) rewayahButtonsContainer.innerHTML = '';
@@ -570,13 +570,13 @@ function setupEnglishReadableView() {
     console.log("Setting up English PDF view");
 
     // Hide Arabic specific elements
-    if (rewayahSelectorContainer) rewayahSelectorContainer.style.display = 'none';
-    if (surahButtonsContainer) surahButtonsContainer.style.display = 'none';
-    if (surahTextDisplayContainer) surahTextDisplayContainer.style.display = 'none';
-    if (readablePlaceholder) readablePlaceholder.style.display = 'none';
+    if (rewayahSelectorContainer) rewayahSelectorContainer.classList.add('hidden');
+    if (surahButtonsContainer) surahButtonsContainer.classList.add('hidden');
+    if (surahTextDisplayContainer) surahTextDisplayContainer.classList.add('hidden');
+    if (readablePlaceholder) readablePlaceholder.classList.add('hidden');
 
     // Show PDF viewer container
-    pdfViewerContainer.style.display = 'flex';
+    pdfViewerContainer.classList.remove('hidden');
 
     // Load the currently selected PDF document (or default)
     loadPdfDocument(currentPdfUrl); 
@@ -674,7 +674,7 @@ async function loadPdfDocument(url) {
         if (glossaryButton) glossaryButton.classList.remove('active');
         if (tocHeader) tocHeader.classList.add('active');
         if (pdfDownloadButton) {
-            pdfDownloadButton.style.display = 'block'; // Show download for main PDF
+            pdfDownloadButton.classList.remove('hidden');
             pdfDownloadButton.textContent = 'Download Entire Quran in English (PDF)';
             pdfDownloadButton.onclick = () => handlePdfDownload(mainPdfUrl); // Set specific handler
         }
@@ -682,13 +682,13 @@ async function loadPdfDocument(url) {
         if (glossaryButton) glossaryButton.classList.add('active');
         if (tocHeader) tocHeader.classList.remove('active');
         if (pdfDownloadButton) {
-            pdfDownloadButton.style.display = 'block'; // Show download for glossary too?
+            pdfDownloadButton.classList.remove('hidden');
             pdfDownloadButton.textContent = 'Download Quran Glossary (PDF)';
             pdfDownloadButton.onclick = () => handlePdfDownload(glossaryPdfUrl); // Set specific handler
         }
     } else {
         // Hide download button if it's some other PDF?
-        if (pdfDownloadButton) pdfDownloadButton.style.display = 'none'; 
+        if (pdfDownloadButton) pdfDownloadButton.classList.add('hidden'); 
     }
 
     try {
@@ -776,15 +776,13 @@ function populateCustomToc(outline, parentElement = customTocList) {
             }).catch(err => {
                 console.error('Error getting page index for bookmark:', item.title, err);
                 // Make the link non-functional if destination fails
-                a.style.color = '#999';
-                a.style.cursor = 'default';
+                a.classList.add('toc-link-disabled');
                 a.title = 'Could not link this item';
             });
         } else {
             // Handle cases where destination might be invalid/null
              console.warn('Invalid destination for bookmark:', item.title);
-             a.style.color = '#999';
-             a.style.cursor = 'default';
+             a.classList.add('toc-link-disabled');
              a.title = 'Invalid bookmark destination';
         }
 
@@ -833,7 +831,7 @@ function switchLanguage(lang) {
         const key = el.getAttribute('data-lang-key');
         if (translations[lang] && translations[lang][key]) {
             // Special handling for readable placeholder
-            if (el === readablePlaceholder && lang === 'ar' && readableSection.style.display !== 'none') {
+            if (el === readablePlaceholder && lang === 'ar' && !readableSection.classList.contains('hidden')) {
                  // Don't update placeholder text if Arabic and readable section is active (buttons will show)
             } else {
                 el.textContent = translations[lang][key];
@@ -856,13 +854,13 @@ function switchLanguage(lang) {
     });
 
     // Update readable section display (buttons vs placeholder vs text vs PDF)
-    const isReadableActive = readableSection.style.display !== 'none';
+    const isReadableActive = !readableSection.classList.contains('hidden');
     if (isReadableActive) {
         if (lang === 'en') {
             setupEnglishReadableView();
         } else { // lang === 'ar'
              // If text was previously shown, go back to selection, else update normally
-    if (surahTextDisplayContainer.style.display !== 'none') {
+    if (!surahTextDisplayContainer.classList.contains('hidden')) {
                  showSurahSelectionUI();
     } else {
                  updateReadableSectionVisibility(); // Will call showSurahSelectionUI for Arabic
@@ -870,23 +868,23 @@ function switchLanguage(lang) {
         }
     } else {
          // If readable section isn't active, just update the placeholder text if visible
-        if (readablePlaceholder.style.display !== 'none' && translations[lang].readablePlaceholder) {
+        if (!readablePlaceholder.classList.contains('hidden') && translations[lang].readablePlaceholder) {
             readablePlaceholder.textContent = translations[lang].readablePlaceholder;
         }
-         if (pdfViewerContainer) pdfViewerContainer.style.display = 'none'; // Ensure PDF viewer is hidden if section inactive
+         if (pdfViewerContainer) pdfViewerContainer.classList.add('hidden'); // Ensure PDF viewer is hidden if section inactive
     }
 }
 
 function switchSection(sectionId) {
     // Hide all sections
     contentSections.forEach(section => {
-        section.style.display = 'none';
+        section.classList.add('hidden');
     });
 
     // Show the target section
     const targetSection = document.getElementById(sectionId);
     if (targetSection) {
-        targetSection.style.display = 'block';
+        targetSection.classList.remove('hidden');
     }
 
     // Update active button state in sidebar
@@ -911,7 +909,7 @@ function switchSection(sectionId) {
         }
     } else {
         // If switching AWAY from readable section, ensure PDF viewer is hidden
-        if (pdfViewerContainer) pdfViewerContainer.style.display = 'none';
+        if (pdfViewerContainer) pdfViewerContainer.classList.add('hidden');
          // Hide other readable elements if needed (handled by existing logic)
     updateReadableSectionVisibility();
     }
