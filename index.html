@@ -3,10 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' https://cdnjs.cloudflare.com; 
+                   worker-src 'self' https://cdnjs.cloudflare.com; 
+                   style-src 'self'; 
+                   font-src 'self'; 
+                   media-src 'self' https://tamzeni.com; 
+                   connect-src 'self' https://tamzeni.com;">
     <title data-lang-key="title">Quran Player</title>
     <link rel="stylesheet" href="style.css">
     <!-- Consider adding a favicon -->
     <!-- <link rel="icon" href="favicon.ico" type="image/x-icon"> -->
+    <link rel="icon" href="Media/icon.ico" type="image/x-icon">
 </head>
 <body>
     <div class="app-container">
