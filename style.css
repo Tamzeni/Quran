@@ -1,0 +1,986 @@
+@import url('https://fonts.googleapis.com/css2?family=Changa:wght@200..800&display=swap');
+
+/* Basic Reset */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-family: sans-serif;
+    line-height: 1.5;
+    color: #333;
+}
+
+body {
+    min-height: 100vh;
+    background-color: #f4f4f4;
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    width: 100%;
+}
+
+header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: #fff;
+    padding: 15px 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    flex-direction: column;
+    gap: 10px;
+}
+
+main {
+    width: 100%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+h1 {
+    font-size: 1.8em;
+    color: #555;
+}
+
+.lang-toggle button {
+    padding: 8px 15px;
+    margin-left: 5px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #eee;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.lang-toggle button.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.selectors {
+    margin-bottom: 20px;
+}
+
+.selectors label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #666;
+}
+
+.selectors select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    margin-bottom: 15px;
+}
+
+.audio-player-container {
+    margin-top: 20px;
+    width: 100%;
+}
+
+.skip-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.skip-button {
+    background-color: #eee;
+    border: 0px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.skip-button:hover {
+    background-color: #ddd;
+}
+
+audio {
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* RTL Specific Styles */
+html[dir="rtl"] body {
+}
+
+html[dir="rtl"] h1 {
+    font-family: 'Changa', sans-serif;
+}
+
+html[dir="rtl"] .lang-toggle button {
+    margin-left: 0;
+    margin-right: 5px;
+}
+
+html[dir="rtl"] .selectors label {
+    text-align: right;
+}
+
+html[dir="rtl"] .sidebar {
+}
+
+html[dir="rtl"] .sidebar nav button {
+    text-align: right;
+}
+
+/* Specific font for English (optional, could keep sans-serif) */
+html[dir="ltr"] body {
+    font-family: sans-serif;
+}
+
+/* Specific font for Arabic */
+html[dir="rtl"] select,
+html[dir="rtl"] button {
+    font-family: 'Changa', sans-serif;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .app-container {
+        max-width: 100%;
+    }
+
+    .main-content {
+        padding: 10px;
+    }
+
+    header,
+    main {
+        max-width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+    }
+
+    h1 {
+        font-size: 1.4em;
+    }
+
+    .surah-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+
+    .rewayah-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .surah-button {
+        font-size: 14px;
+        padding: 0.7rem;
+    }
+
+    .rewayah-button {
+        font-size: 0.9em;
+        padding: 8px 14px;
+    }
+
+    .section-toggle .nav-button {
+        font-size: 0.95em;
+    }
+}
+
+/* Base styles for elements hidden on mobile initially */
+#hamburger-toc {
+    display: none; /* Hide hamburger on desktop */
+}
+
+#toc-overlay {
+    display: none; /* Hide overlay on desktop */
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.2em;
+    }
+    .lang-toggle button {
+        padding: 4px 6px;
+        font-size: 0.75em;
+    }
+    .section-toggle .nav-button {
+        font-size: 0.85em;
+        padding: 6px 8px;
+    }
+
+    .surah-grid {
+        grid-template-columns: repeat(3, 1fr) !important; /* Force 3 columns */
+        gap: 8px;
+        padding: 8px;
+        align-items: stretch;
+    }
+
+    .surah-button {
+        min-height: 44px;
+        font-size: 13px;
+        padding: 6px 8px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        line-height: 1.4;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        box-shadow: 0 2px 4px rgba(0,0,0,.05);
+        width: 100%;
+        border: 1px solid #e5e7eb;
+    }
+
+    html[dir="rtl"] .surah-button {
+        font-family: 'Changa', sans-serif;
+        letter-spacing: -0.5px;
+    }
+
+    .selector-label[data-lang-key="selectRewayahLabel"] {
+        font-size: 1.1em;
+    }
+
+    .rewayah-buttons {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        padding: 8px 0;
+    }
+
+    .rewayah-button {
+        font-size: 0.9em;
+        padding: 8px 12px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    #surah-text-display-container {
+        padding: 15px;
+    }
+
+    .surah-nav-button {
+        padding: 6px;
+        gap: 6px;
+    }
+
+    .surah-nav-button .arrow {
+        font-size: 1.1em;
+    }
+
+    .surah-nav-button .surah-name {
+        font-size: 0.75em;
+    }
+
+    /* PDF Viewer Mobile Styles */
+    .pdf-viewer {
+        flex-direction: column; /* Stack sidebar and main content */
+        gap: 10px;
+    }
+
+    .pdf-toc-sidebar {
+        width: 100%; /* Take full width */
+        order: 0; /* Reset order if needed, place above */
+        max-height: 30vh; /* Limit height, but allow more than desktop */
+    }
+
+    .pdf-sidebar-button,
+    .pdf-toc-sidebar h4 {
+        font-size: 0.9em; /* Adjust font size */
+        padding: 6px 8px;
+    }
+    
+    #custom-toc-list a {
+        font-size: 0.85em; /* Adjust TOC link font size */
+    }
+    
+    .pdf-viewer-main {
+        width: 100%; /* Ensure main content takes full width */
+        display: block; /* <<< ADDED: Explicitly set display */
+    }
+    
+    .pdf-canvas-container {
+        /* No max-width needed when stacked */
+    }
+    /* END PDF Viewer Mobile Styles */
+
+    /* --- Mobile TOC/Overlay/Hamburger Styles --- */
+    #hamburger-toc {
+        display: inline-block; /* Show hamburger on mobile */
+        background: none;
+        border: none;
+        padding: 0 5px; /* Adjust padding */
+        font-size: 1.6em; /* Make hamburger bigger */
+        line-height: 1; /* Align vertically */
+        cursor: pointer;
+        color: #555; /* Match controls text color */
+        margin-right: 10px; /* Add space between hamburger and prev button */
+    }
+    
+    #hamburger-toc:hover {
+        color: #000;
+    }
+
+    #pdf-controls {
+        /* Adjust gap slightly if needed */
+        /* gap: 12px; */ 
+    }
+
+    #custom-toc-sidebar {
+        /* Override previous mobile styles */
+        width: 80%; 
+        max-width: 300px; /* Limit width */
+        height: 100%;
+        position: fixed; /* Position relative to viewport */
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        transform: translateX(-100%); /* Start hidden off-screen */
+        transition: transform 0.3s ease-in-out;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+        /* Remove order, max-height from previous mobile rule */
+        order: initial;
+        max-height: initial;
+        overflow-y: auto; /* Ensure scrolling */
+    }
+
+    #custom-toc-sidebar.toc-mobile-visible {
+        transform: translateX(0); /* Slide in */
+    }
+
+    #toc-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999; /* Below sidebar, above content */
+        display: none; /* Hidden by default */
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    #toc-overlay.visible {
+        display: block;
+        opacity: 1;
+    }
+    /* --- END ADDITION --- */
+}
+
+/* Add Font Face Rules */
+@font-face {
+  font-family: 'BazziFont';
+  src: url('fonts/Bazzi.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'DooriFont';
+  src: url('fonts/Doori.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'HafsFont';
+  src: url('fonts/hafs-normal.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'QaloonFont';
+  src: url('fonts/Qaloon.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'QunbulFont';
+  src: url('fonts/Qunbul.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ShoubaFont';
+  src: url('fonts/Shouba.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SoosiFont';
+  src: url('fonts/Soosi.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'WarshFont';
+  src: url('fonts/Warsh.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Styling for Readable Section Elements */
+#rewayah-selector-container {
+    margin-bottom: 15px;
+}
+
+#rewayah-selector-container label {
+    margin-right: 10px;
+}
+
+.surah-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    justify-items: center;
+}
+
+.surah-button {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    font-family: 'Changa';
+    font-size: 14px;
+    line-height: 1.925em;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    transition: all 0.3s ease 0s;
+    text-decoration: none;
+    outline: 0;
+    border-radius: .475rem;
+    border: solid 1px #dee2e6;
+    color: #030726 !important;
+    font-weight: 650;
+    width: 100%;
+    padding: .9rem;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
+    margin-bottom: 0;
+    text-align: center;
+    cursor: pointer;
+}
+
+.surah-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 17px -3px rgba(0,0,0,.12), 0 5px 8px -2px rgba(0,0,0,.07);
+    border-color: #ced4da;
+}
+
+#surah-text-display-container {
+    position: relative;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    margin-top: 20px;
+}
+
+/* ADDED: Styles for the navigation header container */
+.surah-navigation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Updated Styles for Surah Navigation Buttons */
+.surah-nav-button {
+    background-color: #f0f0f0;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.surah-nav-button.prev {
+    flex-direction: row;
+}
+
+.surah-nav-button.next {
+    flex-direction: row-reverse;
+}
+
+.surah-nav-button .arrow {
+    font-size: 1.2em;
+    line-height: 1;
+}
+
+.surah-nav-button .surah-name {
+    font-size: 0.8em;
+    color: #666;
+    font-family: 'Changa', sans-serif;
+    text-align: center;
+}
+
+.surah-nav-button:hover {
+    background-color: #e0e0e0;
+    color: #000;
+}
+
+/* Styles for Back button (ensure consistency) */
+#back-to-surah-select {
+    padding: 8px 15px;
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    display: inline-block;
+    margin: 0;
+}
+
+#back-to-surah-select:hover {
+    background-color: #e0e0e0;
+}
+
+/* Adjust title position */
+.surah-display-title {
+    text-align: center;
+    font-size: 1.1em;
+    color: #555;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+/* Styles for Basmala display (already centered) */
+#basmala-display {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 25px;
+    color: var(--text-color);
+    line-height: 1.6; 
+}
+
+#surah-text-display {
+    text-align: justify;
+    font-size: 1.4em;
+    line-height: 2.2;
+    margin-top: 15px;
+    color: var(--text-color);
+}
+
+/* Add specific styles for each Rewayah font application */
+.font-bazzi #surah-text-display { font-family: 'BazziFont', var(--arabic-fallback-font); }
+.font-doori #surah-text-display { font-family: 'DooriFont', var(--arabic-fallback-font); }
+.font-hafs #surah-text-display { font-family: 'HafsFont', var(--arabic-fallback-font); }
+.font-qaloon #surah-text-display { font-family: 'QaloonFont', var(--arabic-fallback-font); }
+.font-qunbul #surah-text-display { font-family: 'QunbulFont', var(--arabic-fallback-font); }
+.font-shouba #surah-text-display { font-family: 'ShoubaFont', var(--arabic-fallback-font); }
+.font-soosi #surah-text-display { font-family: 'SoosiFont', var(--arabic-fallback-font); }
+.font-warsh #surah-text-display { font-family: 'WarshFont', var(--arabic-fallback-font); }
+
+/* Define fallback font variable (example) */
+:root {
+    --arabic-fallback-font: sans-serif;
+}
+
+/* ADD a specific font-face rule for the verse markers */
+@font-face {
+    font-family: 'ayah-marker-font';
+    src: url('fonts/hafs-numbers-only.otf') format('opentype'); 
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Apply the specific font ONLY to the verse markers within the display area */
+#surah-text-display i,
+#surah-text-display .verse-marker {
+    font-family: 'ayah-marker-font';
+    color: #008000;
+    margin: 0 0.2em;
+    font-style: normal;
+    display: inline-block;
+    font-size: 1.5em;
+}
+
+/* --- END ADDITION --- */
+
+/* Validation Message Styling */
+.validation-message {
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 0.25rem;
+    display: none;
+}
+
+/* Ensure it appears correctly within the flex container */
+.selector-container.rewayah-selector {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Styling for Rewayah Buttons (Replaces Selector) */
+.selector-label[data-lang-key="selectRewayahLabel"] {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+    font-size: 1.2em;
+    color: #4b5563;
+}
+
+html[dir="rtl"] .selector-label[data-lang-key="selectRewayahLabel"] {
+    text-align: right;
+}
+
+/* Base styles for rewayah buttons */
+.rewayah-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 15px;
+    padding: 10px 0;
+    width: 100%;
+}
+
+.rewayah-button {
+    padding: 10px 18px;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.2s ease;
+    font-family: 'Changa', sans-serif;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    color: #374151;
+    text-align: center;
+    width: 100%;
+    order: 0; /* Default order */
+}
+
+.rewayah-button:hover {
+    background-color: #f9fafb;
+    border-color: #adb5bd;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
+}
+
+.rewayah-button.active {
+    background-color: #3b82f6;
+    color: white;
+    border-color: #2563eb;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Set specific order for each rewayah button */
+.rewayah-button[data-rewayah="hafs"] { order: 1; }
+.rewayah-button[data-rewayah="warsh"] { order: 2; }
+.rewayah-button[data-rewayah="qaloon"] { order: 3; }
+.rewayah-button[data-rewayah="doori"] { order: 4; }
+.rewayah-button[data-rewayah="soosi"] { order: 5; }
+.rewayah-button[data-rewayah="bazzi"] { order: 6; }
+.rewayah-button[data-rewayah="qunbul"] { order: 7; }
+.rewayah-button[data-rewayah="shouba"] { order: 8; }
+
+/* Adjust validation message position if needed */
+#rewayah-validation-message {
+    width: 100%;
+    text-align: left;
+}
+
+html[dir="rtl"] #rewayah-validation-message {
+    text-align: right;
+}
+
+/* Remove specific styles for the old container if they interfere */
+.selector-container.rewayah-selector {
+}
+
+/* NEW Styles for Section Toggle */
+.section-toggle {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+    background-color: #e9ecef;
+    padding: 5px;
+    border-radius: 8px;
+}
+
+.section-toggle .nav-button {
+    flex-grow: 1;
+    padding: 10px 15px;
+    background-color: transparent;
+    color: #495057;
+    border: none;
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    width: auto;
+}
+
+html[dir="rtl"] .section-toggle .nav-button {
+    font-family: 'Changa', sans-serif;
+}
+
+.section-toggle .nav-button:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #212529;
+}
+
+.section-toggle .nav-button.active {
+    background-color: #ffffff;
+    color: #007bff;
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+#pdf-viewer-en {
+    border: 1px solid #ddd; /* Optional: Add a border for visual separation */
+    background-color: #fff; /* Ensure it has a background */
+}
+
+/* PDF.js Viewer Styles */
+.pdf-viewer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+/* ADDED: Styles for TOC Sidebar */
+.pdf-toc-sidebar {
+    width: 250px;
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    order: -1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Style for buttons/headers in sidebar */
+.pdf-sidebar-button,
+.pdf-toc-sidebar h4 {
+    display: block;
+    width: 100%;
+    padding: 10px 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    border-radius: 4px;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.pdf-toc-sidebar h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: none;
+    font-weight: bold;
+    cursor: default;
+}
+
+.pdf-sidebar-button:hover,
+.pdf-toc-sidebar h4:not(.active) {
+    background-color: #f0f0f0;
+}
+
+/* Active state for sidebar buttons/headers */
+.pdf-sidebar-button.active,
+.pdf-toc-sidebar h4.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+    font-weight: bold;
+    cursor: default;
+}
+
+#custom-toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+#custom-toc-list li {
+    margin-bottom: 8px;
+}
+
+#custom-toc-list a {
+    text-decoration: none;
+    color: #007bff;
+    font-size: 0.95em;
+    cursor: pointer;
+    line-height: 1.6;
+}
+
+#custom-toc-list a:hover {
+    text-decoration: underline;
+}
+
+/* Styles for nested lists */
+#custom-toc-list ul {
+    padding-left: 20px;
+    margin-top: 5px;
+}
+/* END TOC Styles */
+
+/* ADDED: Container for main viewer area (controls + canvas) */
+.pdf-viewer-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.pdf-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: fit-content;
+}
+
+.pdf-controls button {
+    padding: 5px 10px;
+    font-size: 1em;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 3px;
+}
+
+.pdf-controls button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.pdf-controls span {
+    font-size: 0.9em;
+    color: #333;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Added style for page input */
+.pdf-page-input {
+    width: 50px;
+    padding: 3px 5px;
+    margin: 0 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.pdf-canvas-container {
+    width: 100%;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    overflow: auto;
+}
+
+#pdf-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* ADDED: Style for Download Button */
+.pdf-download-button {
+    padding: 8px 15px;
+    font-size: 0.9em;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    margin-top: 5px;
+    transition: background-color 0.2s ease;
+}
+
+.pdf-download-button:hover {
+    background-color: #218838;
+}
+
+.pdf-download-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+/* END Download Button Style */
+
+/* --- END PDF.js Viewer Styles --- */
+
+/* Add margin top to glossary button */
+#glossary-button {
+    margin-top: 10px;
+}
+
+/* Add margin top to h4 */
+.pdf-toc-sidebar h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: none;
+} 
