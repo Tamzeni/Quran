@@ -123,7 +123,7 @@ async function fetchQuranData() {
 // --- Language Content ---
 const translations = {
     en: {
-        title: "Quran Player",
+        title: "Quran Player and Reader",
         selectReciter: "Select Reciter:",
         selectSurah: "Select Surah:",
         selectRewayah: "Select Rewayah:",
@@ -139,7 +139,7 @@ const translations = {
         backButton: "Back"
     },
     ar: {
-        title: "مُشغل القرآن الكريم",
+        title: "مُشغل وقارئ القرآن الكريم",
         selectReciter: "اختر القارئ:",
         selectSurah: "اختر السورة:",
         selectRewayah: "اختر الرواية:",
@@ -276,14 +276,14 @@ function populateRewayahButtons() {
 function updateAudioSource() {
     const selectedReciter = reciterSelect.value;
     const selectedSurah = surahSelect.value;
-    const baseMediaUrl = 'https://tamzeni.com/Quran/Media/'; // <<< ADD THIS LINE (REPLACE URL)
+    const baseMediaUrl = 'https://tamzeni.com/Quran/Media/'; 
 
     // Check if a valid reciter is selected (not the placeholder)
     if (selectedReciter && selectedSurah) {
 
         const paddedSurah = selectedSurah.toString().padStart(3, '0');
-        // const audioSrc = `Media/${selectedReciter}/${paddedSurah}.mp3`; // <<< COMMENT OUT TO USE HOSTED MEDIA
-        const audioSrc = `${baseMediaUrl}${selectedReciter}/${paddedSurah}.mp3`; // <<< COMMENT IN TO USE LOCAL MEDIA
+         const audioSrc = `Media/${selectedReciter}/${paddedSurah}.mp3`;  //<<< UNCOMMENT TO USE LOCAL MEDIA 
+       // const audioSrc = `${baseMediaUrl}${selectedReciter}/${paddedSurah}.mp3`; <<<   UNCOMMENT TO USE HOSTED MEDIA
 
         console.log("Attempting to load audio:", audioSrc); // For debugging
 
@@ -896,8 +896,6 @@ function switchSection(sectionId) {
         }
     });
 
-    // Update readable section display after switching
-    // updateReadableSectionVisibility(); // REMOVED old call
 
     // ADDED: Conditional update based on language for readable section
     if (sectionId === 'readable-section') {
