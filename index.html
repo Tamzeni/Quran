@@ -53,6 +53,10 @@
                 </section>
 
                 <section id="readable-section" class="content-section hidden">
+                    <div class="readable-toggle">
+                        <button class="readable-nav-button active" data-readable-section="full-quran" data-lang-key="fullQuran">كامل</button>
+                        <button class="readable-nav-button" data-readable-section="divided-quran" data-lang-key="dividedQuran">مجزء</button>
+                    </div>
 
                     <div id="rewayah-selector-container" class="selector-container rewayah-selector hidden">
                         <div id="rewayah-buttons-container" class="rewayah-buttons">
@@ -93,6 +97,12 @@
                         <!-- Surah buttons populated by JS -->
                     </div>
 
+                    <div id="divided-quran-container" class="divided-quran-container hidden">
+                        <div class="juz-grid">
+                            <!-- Juz buttons will be populated by JS -->
+                        </div>
+                    </div>
+
                     <div id="surah-text-display-container" class="hidden">
                         <div class="surah-navigation-header hidden">
                             <button id="prev-surah" class="surah-nav-button prev hidden" aria-label="Previous Surah">
@@ -114,7 +124,7 @@
             <!-- Optional Footer -->
             <!--
             <footer>
-                <p>&copy; 2024 Tamzeni.com</p>
+                <p>&copy; 2025 Hasana.io</p>
             </footer>
             -->
         </div>

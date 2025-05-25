@@ -99,6 +99,40 @@ const rewayahFontMap = {
     'Warsh': 'font-warsh'
 };
 
+// Juz to Surah mapping 
+const juzToSurahMapping = {
+    1: 1,   // الفاتحة
+    2: 2,   // البقرة
+    3: 2,   // البقرة
+    4: 3,   // آل عمران
+    5: 4,   // النساء
+    6: 4,   // النساء
+    7: 5,   // المائدة
+    8: 6,   // الأنعام
+    9: 7,   // الأعراف
+    10: 8,  // الأنفال
+    11: 9,  // التوبة
+    12: 10, // هود
+    13: 11, // يوسف
+    14: 12, // الحجر
+    15: 17, // الإسراء
+    16: 18, // الكهف
+    17: 21, // الأنبياء
+    18: 23, // المؤمنون
+    19: 25, // الفرقان
+    20: 27,// النمل
+    21: 29, // العنكبوت
+    22: 33, // الأحزاب
+    23: 36, // يس
+    24: 39, // الزمر
+    25: 41, // فصلت
+    26: 46, // الأحقاف
+    27: 51, // الذاريات
+    28: 58, // الحديد
+    29: 67, // الملك
+    30: 78  // النبأ
+};
+
 // <<< ADDED: Function to fetch the combined Quran data --->
 async function fetchQuranData() {
     try {
@@ -130,6 +164,8 @@ const translations = {
         sections: "Sections",
         audible: "Audible",
         readable: "Readable",
+        fullQuran: "Full",
+        dividedQuran: "Divided",
         readableContentTitle: "Readable Quran Content",
         readablePlaceholder: "This section will display the text of the selected Surah. (Functionality to be added)",
         reciterPlaceholder: " Select Reciter ",
@@ -146,6 +182,8 @@ const translations = {
         sections: "الأقسام",
         audible: " مسموع 🔉",
         readable: "مكتوب 📖",
+        fullQuran: "كامل",
+        dividedQuran: "مجزء",
         readableContentTitle: "القرآن الكريم للقراءة",
         readablePlaceholder: "هذا القسم سيعرض نص السورة المختارة. (سيتم إضافة الوظائف لاحقًا)",
         reciterPlaceholder: " اختر القارئ ",
@@ -276,7 +314,7 @@ function populateRewayahButtons() {
 function updateAudioSource() {
     const selectedReciter = reciterSelect.value;
     const selectedSurah = surahSelect.value;
-    const baseMediaUrl = 'https://tamzeni.com/Quran/Media/'; 
+    const baseMediaUrl = 'https://hasana.io/Media/'; 
 
     // Check if a valid reciter is selected (not the placeholder)
     if (selectedReciter && selectedSurah) {
@@ -952,11 +990,22 @@ skipForwardButton.addEventListener('click', () => {
 });
 
 backToSurahSelectButton.addEventListener('click', () => {
-    showSurahSelectionUI();
+    // Check which section is currently active
+    const activeReadableButton = document.querySelector('.readable-nav-button.active');
+    const activeSectionId = activeReadableButton ? activeReadableButton.dataset.readableSection : 'full-quran';
+    
+    if (activeSectionId === 'divided-quran') {
+        // If we're in Juz section, go back to Juz selection
+        switchReadableSection('divided-quran');
+    } else {
+        // If we're in full Quran section, go back to Surah selection
+        showSurahSelectionUI();
+    }
+    
     // Clear the displayed text and font class
     if (surahTextDisplay) surahTextDisplay.textContent = '';
     if (surahTextDisplayContainer) {
-    surahTextDisplayContainer.className = Object.values(rewayahFontMap).reduce((acc, val) => acc.replace(val, ''), surahTextDisplayContainer.className).trim();
+        surahTextDisplayContainer.className = Object.values(rewayahFontMap).reduce((acc, val) => acc.replace(val, ''), surahTextDisplayContainer.className).trim();
     }
     currentSurahOrder = null; // Reset tracker
 });
@@ -1177,4 +1226,133 @@ function handlePdfDownload(urlToDownload) {
         isDownloadButtonDisabled = false;
         console.log("Download button re-enabled.");
     }, downloadCooldown);
-} 
+}
+
+// Function to populate Juz buttons
+function populateJuzButtons() {
+    const juzGrid = document.querySelector('.juz-grid');
+    if (!juzGrid) return;
+
+    juzGrid.innerHTML = ''; // Clear existing buttons
+
+    // Create 30 Juz buttons
+    for (let i = 1; i <= 30; i++) {
+        const button = document.createElement('button');
+        button.classList.add('juz-button');
+        button.dataset.juzNumber = i;
+        button.textContent = `الجزء ${i}`; // Arabic numbering
+
+        button.addEventListener('click', () => {
+            // Load the Juz file directly from Written/Juzzu/ folder
+            displayJuzText(i);
+        });
+
+        juzGrid.appendChild(button);
+    }
+}
+
+// Function to display Juz text from the Ajzaa folder
+async function displayJuzText(juzNumber) {
+    console.log(`Loading Juz ${juzNumber} from file`);
+    
+    // Update current Surah tracker (set to null since we're displaying a Juz, not a specific Surah)
+    currentSurahOrder = null;
+
+    const loadingKey = currentLanguage === 'ar' ? 'جاري التحميل...' : 'Loading...';
+    surahTextDisplay.textContent = loadingKey; // Show loading indicator
+
+    const basmalaDisplayElement = document.getElementById('basmala-display');
+    const surahTitleDisplayElement = document.getElementById('surah-display-title');
+
+    // Hide basmala for Juz display
+    basmalaDisplayElement.classList.add('hidden');
+
+    const juzFilePath = `Written/Ajzaa/${juzNumber}.txt`;
+
+    try {
+        const response = await fetch(juzFilePath);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status} for ${juzFilePath}`);
+        }
+        const text = await response.text();
+
+        // Set title for Juz
+        surahTitleDisplayElement.textContent = `الجزء ${juzNumber}`;
+        surahTitleDisplayElement.classList.remove('hidden');
+
+        // Apply font class for proper verse number styling (same as full Quran)
+        surahTextDisplayContainer.className = 'surah-text-display-container';
+        // Apply a default font class for proper verse number rendering
+        surahTextDisplayContainer.classList.add('font-hafs'); // or whichever font you prefer
+
+        // Display the Juz text
+        surahTextDisplay.textContent = text.trim();
+        surahTextDisplay.lang = 'ar';
+        surahTextDisplay.dir = 'rtl';
+
+        // Show navigation header but hide prev/next buttons, only show back button
+        if (surahNavigationHeader) {
+            surahNavigationHeader.classList.remove('hidden');
+            // Hide prev/next buttons for Juz display
+            if (prevSurahButton) prevSurahButton.classList.add('hidden');
+            if (nextSurahButton) nextSurahButton.classList.add('hidden');
+            // Show back button
+            if (backToSurahSelectButton) backToSurahSelectButton.classList.remove('hidden');
+        }
+
+        showSurahTextUI(); // Switch to the text view
+
+    } catch (error) {
+        console.error(`Could not fetch or display Juz ${juzNumber} from ${juzFilePath}:`, error);
+        surahTextDisplay.textContent = `خطأ في تحميل الجزء ${juzNumber}. يرجى المحاولة مرة أخرى.`;
+        surahTitleDisplayElement.classList.add('hidden'); 
+        basmalaDisplayElement.classList.add('hidden');
+        // Hide nav header on error
+        if (surahNavigationHeader) {
+            surahNavigationHeader.classList.add('hidden');
+        }
+    }
+}
+
+// Modify the existing switchReadableSection function to handle the new readable toggle
+function switchReadableSection(sectionId) {
+    const readableToggleButtons = document.querySelectorAll('.readable-nav-button');
+    const fullQuranContainer = document.getElementById('surah-buttons-container');
+    const dividedQuranContainer = document.getElementById('divided-quran-container');
+    const rewayahSelectorContainer = document.getElementById('rewayah-selector-container');
+
+    // Remove active class from all buttons
+    readableToggleButtons.forEach(btn => btn.classList.remove('active'));
+
+    // Find and activate the clicked button
+    const activeButton = Array.from(readableToggleButtons).find(btn => btn.dataset.readableSection === sectionId);
+    if (activeButton) activeButton.classList.add('active');
+
+    // Hide all containers first
+    if (fullQuranContainer) fullQuranContainer.classList.add('hidden');
+    if (dividedQuranContainer) dividedQuranContainer.classList.add('hidden');
+    if (rewayahSelectorContainer) rewayahSelectorContainer.classList.add('hidden');
+
+    // Show the selected container
+    if (sectionId === 'full-quran') {
+        if (fullQuranContainer) fullQuranContainer.classList.remove('hidden');
+        if (rewayahSelectorContainer) rewayahSelectorContainer.classList.remove('hidden');
+        populateReadableSurahButtons(); // Existing function to populate full Quran buttons
+        populateRewayahButtons(); // Show Rewayah buttons for full Quran
+    } else if (sectionId === 'divided-quran') {
+        if (dividedQuranContainer) dividedQuranContainer.classList.remove('hidden');
+        // Don't show Rewayah selector for Juz section
+        populateJuzButtons(); // New function to populate Juz buttons
+    }
+}
+
+// Add event listeners for the new readable toggle buttons
+document.addEventListener('DOMContentLoaded', () => {
+    const readableToggleButtons = document.querySelectorAll('.readable-nav-button');
+    readableToggleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const sectionId = button.dataset.readableSection;
+            switchReadableSection(sectionId);
+        });
+    });
+}); 

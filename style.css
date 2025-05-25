@@ -1002,4 +1002,58 @@ html[dir="rtl"] .section-toggle .nav-button {
 #custom-toc-list ul {
     list-style: none;
     padding-left: 15px; /* Indent sub-items */
+}
+
+/* Styles for Readable Toggle */
+.readable-toggle {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+    gap: 10px;
+}
+
+.readable-nav-button {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.readable-nav-button.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
+
+/* Styles for Juz Grid */
+.divided-quran-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.juz-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    padding: 15px;
+}
+
+.juz-button {
+    background-color: #f0f0f0;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.juz-button:hover {
+    background-color: #e0e0e0;
+}
+
+.juz-button:active {
+    background-color: #d0d0d0;
 } 
